@@ -106,7 +106,7 @@ jobs:
 
       # TODO: output the right domain.
       - run: |
-          echo "Deployed $RELEASE_NAME successfully, your site is available here: http://$DOMAIN"
+          echo "Deployed $RELEASE_NAME successfully, your site is available here: http://$RELEASE_NAME.$CIRCLE_PROJECT_REPONAME.silta.wdr.io"
 
 workflows:
   version: 2
