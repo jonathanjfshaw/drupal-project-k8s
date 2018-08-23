@@ -21,7 +21,7 @@ spec:
         command: ["/bin/sh", "-c"]
         args:
         - cd web;
-          echo 'aaa' > /var/backups/test-{{ .Release.Name }};
+          echo "aaa" > /var/backups/test-postinstall ;
           bootstrapped=$(drush status --field=bootstrap);
           if [[ $bootstrapped = *'Success'* ]]; then drush updatedb -n; drush config-import -n; drush entity-updates -n;
           else conf_count=$(ls ../config/sync/ | wc -l);
