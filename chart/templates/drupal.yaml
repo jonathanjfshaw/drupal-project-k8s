@@ -94,4 +94,4 @@ spec:
           claimName: {{ .Release.Name }}-public-files
       - name: drupal-backups-volume
         persistentVolumeClaim:
-        claimName: {{ .Release.Namespace }}-backups
+          claimName: {{ .Release.Namespace }}-backups
