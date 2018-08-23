@@ -1,0 +1,61 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ .Release.Name }}-dbdump-cron
+spec:
+  # TODO: CHANGE SCHEDULE TO RANDOM TIME AT NIGHT AFTER THIS IS TESTED SUCCESSFULLY
+  schedule: "0 * * * *"
+  concurrencyPolicy: Forbid
+  backOffLimit: 3
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: drupal-dbdump-cron
+            image: {{ .Values.drupal.image | quote }}
+            command: ["/bin/sh", "-c"]
+            args:
+            - cd web;
+              bootstrapped=$(drush status --field=bootstrap);
+              # TODO: only if branch name is defined to make backups
+              # TODO 2: file = date, symlink to latest. Cleanup.
+              if [[ $bootstrapped = *'Success'* ]]; then drush sql-dump > /var/backups/db-{{ .Release.Name }}-latest.sql
+              fi;
+            env:
+            - name: PHP_FPM_CLEAR_ENV
+              value: "no"
+            - name: DB_USER
+              value: "{{ .Values.mariadb.db.user }}"
+            - name: DB_NAME
+              value: "{{ .Values.mariadb.db.name }}"
+            - name: DB_HOST
+              value: "{{ .Release.Name }}-mariadb"
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Release.Name }}-mariadb"
+                  key: mariadb-password
+            - name: HASH_SALT
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-secrets-drupal
+                  key: hashsalt
+          {{- range $key, $val := .Values.drupal.env }}
+            - name: {{ $key }}
+              value: {{ $val | quote }}
+          {{- end }}
+            volumeMounts:
+              - name: drupal-files-volume
+                mountPath: /var/www/html/web/sites/default/files
+              - name: drupal-backups-volume
+                mountPath: /var/backups
+          imagePullSecrets:
+          - name: gcr
+          volumes:
+          - name: drupal-files-volume
+            persistentVolumeClaim:
+              claimName: {{ .Release.Name }}-public-files
+          - name: drupal-backups-volume
+            persistentVolumeClaim:
+              claimName: {{ .Release.Namespace }}-backups
