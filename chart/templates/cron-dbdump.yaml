@@ -15,11 +15,11 @@ spec:
           - name: drupal-dbdump-cron
             image: {{ .Values.drupal.image | quote }}
             command: ["/bin/sh", "-c"]
+            # TODO: only if branch name is defined to make backups
+            # TODO 2: file = date, symlink to latest. Cleanup.
             args:
             - cd web;
               bootstrapped=$(drush status --field=bootstrap);
-              # TODO: only if branch name is defined to make backups
-              # TODO 2: file = date, symlink to latest. Cleanup.
               if [[ $bootstrapped = *'Success'* ]]; then drush sql-dump > /var/backups/db-{{ .Release.Name }}-latest.sql
               fi;
             env:
