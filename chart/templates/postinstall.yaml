@@ -21,12 +21,11 @@ spec:
         command: ["/bin/sh", "-c"]
         args:
         - cd web;
-          echo "aaa" > /var/backups/test-postinstall ;
           bootstrapped=$(drush status --field=bootstrap);
           if [[ $bootstrapped = *'Success'* ]]; then drush updatedb -n; drush config-import -n; drush entity-updates -n;
           else conf_count=$(ls ../config/sync/ | wc -l);
-            if [ $conf_count -gt 1 ]; then drush site-install -n config_installer;
-            else drush sql-cli < /var/backups/db/production-latest.sql; drush site-install minimal -y;
+            if [ $conf_count -gt 1 ]; then drush sql-cli < /var/backups/db/production-latest.sql; drush site-install -n config_installer;
+            else drush site-install minimal -y;
             fi;
           fi;
         env:
