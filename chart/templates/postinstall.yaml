@@ -10,7 +10,7 @@ metadata:
     # job is considered part of the release.
     "helm.sh/hook": post-install
     "helm.sh/hook-weight": "-5"
-    "helm.sh/hook-delete-policy": hook-succeeded
+    #"helm.sh/hook-delete-policy": hook-succeeded
 spec:
   template:
     spec:
@@ -21,7 +21,7 @@ spec:
         command: ["/bin/sh", "-c"]
         args:
         - cd web;
-          echo 'aaa' > /var/backups/test-{{ .Release.Name }};
+          echo 'aaa' > /var/backups/test;
           ls /var/backups
           bootstrapped=$(drush status --field=bootstrap);
           if [[ $bootstrapped = *'Success'* ]]; then drush updatedb -n; drush config-import -n; drush entity-updates -n;
