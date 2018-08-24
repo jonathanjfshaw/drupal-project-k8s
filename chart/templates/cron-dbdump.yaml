@@ -71,3 +71,5 @@ spec:
             persistentVolumeClaim:
               claimName: {{ .Release.Namespace }}-backups
           restartPolicy: OnFailure
+          successfulJobsHistoryLimit: 0
+          failedJobsHistoryLimit: 0
