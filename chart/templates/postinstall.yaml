@@ -24,11 +24,13 @@ spec:
           bootstrapped=$(drush status --field=bootstrap);
           if [[ $bootstrapped = *'Success'* ]]; then drush updatedb -n; drush config-import -n; drush entity-updates -n;
           else conf_count=$(ls ../config/sync/ | wc -l);
-            if [ $conf_count -gt 1 ]; then drush sql-cli < /var/backups/db/production-latest.sql; drush site-install -n config_installer;
+            if [ $conf_count -gt 1 ]; then drush sql-cli < "/var/backups/db/$PRODUCTION_RELEASE_NAME-latest.sql"; drush site-install -n config_installer;
             else drush site-install minimal -y;
             fi;
           fi;
         env:
+        - name: PRODUCTION_RELEASE_NAME
+          value: {{ .Values.production_release_name | default "production" }}
         - name: PHP_FPM_CLEAR_ENV
           value: "no"
         - name: DB_USER

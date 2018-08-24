@@ -60,6 +60,8 @@ spec:
         env:
         - name: RELEASE_NAME
           value: {{ .Release.Name }}
+        - name: PRODUCTION_RELEASE_NAME
+          value: {{ .Values.production_release_name | default "production" }}
         - name: DB_USER
           value: "{{ .Values.mariadb.db.user }}"
         - name: DB_NAME
