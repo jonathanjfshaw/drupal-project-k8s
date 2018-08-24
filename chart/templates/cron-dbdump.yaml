@@ -27,7 +27,7 @@ spec:
               echo $RELEASE_NAME >> "/var/backups/test-dbdump-$PRODUCTION_RELEASE_NAME";
               echo $PRODUCTION_RELEASE_NAME >> "/var/backups/test-dbdump-$PRODUCTION_RELEASE_NAME";
 
-              if [[ $bootstrapped = *'Success'* ]] && [[ "$RELEASE_NAME" = "$PRODUCTION_RELEASE_NAME" ]];
+              if [[ $bootstrapped = 'Successful' ]] && [[ "$RELEASE_NAME" = "$PRODUCTION_RELEASE_NAME" ]];
               then echo "Dumping db" >> "/var/backups/test-dbdump-$PRODUCTION_RELEASE_NAME"; drush sql-dump > "/var/backups/db/$RELEASE_NAME-latest.sql" ;
               fi;
             env:

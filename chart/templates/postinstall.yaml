@@ -15,6 +15,8 @@ spec:
   template:
     spec:
       restartPolicy: Never
+      successfulJobsHistoryLimit: 0
+      failedJobsHistoryLimit: 0
       containers:
       - name: postinstall
         image: {{ .Values.drupal.image | quote }}
@@ -24,7 +26,7 @@ spec:
           mkdir -p /var/backups/db/;
           touch "/var/backups/test-postinstall-$PRODUCTION_RELEASE_NAME";
           bootstrapped=$(drush status --field=bootstrap);
-          if [[ $bootstrapped = *'Success'* ]]; then drush updatedb -n; drush config-import -n; drush entity-updates -n;
+          if [[ $bootstrapped = 'Successful' ]]; then drush updatedb -n; drush config-import -n; drush entity-updates -n;
           else conf_count=$(ls ../config/sync/ | wc -l);
             if [ $conf_count -gt 1 ]; then drush sql-cli < "/var/backups/db/$PRODUCTION_RELEASE_NAME-latest.sql"; drush site-install -n config_installer;
             else drush site-install minimal -y;
