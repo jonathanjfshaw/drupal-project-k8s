@@ -19,9 +19,11 @@ spec:
             # TODO 2: file = date, symlink to latest. Cleanup.
             args:
             - cd web;
+              mkdir -p /var/backups/db/;
+              touch "/var/backups/test-dbdump-$PRODUCTION_RELEASE_NAME";
               bootstrapped=$(drush status --field=bootstrap);
               if [[ $bootstrapped = *'Success'* ] && [ "$RELEASE_NAME" = "$PRODUCTION_RELEASE_NAME" ]];
-                then drush sql-dump > "/var/backups/db-$RELEASE_NAME-latest.sql" ;
+                then drush sql-dump > "/var/backups/db/$RELEASE_NAME-latest.sql" ;
               fi;
             env:
             - name: RELEASE_NAME
