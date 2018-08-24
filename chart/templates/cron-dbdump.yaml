@@ -3,8 +3,7 @@ kind: CronJob
 metadata:
   name: {{ .Release.Name }}-dbdump-cron
 spec:
-  # TODO: CHANGE SCHEDULE TO RANDOM TIME AT NIGHT AFTER THIS IS TESTED SUCCESSFULLY
-  schedule: "*/5 * * * *"
+  schedule: "{{ randAlphaNum 1 }} 2 * * *"
   concurrencyPolicy: Forbid
   backOffLimit: 3
   successfulJobsHistoryLimit: 0
