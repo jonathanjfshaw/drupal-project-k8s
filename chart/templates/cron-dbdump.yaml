@@ -7,16 +7,17 @@ spec:
   schedule: "*/5 * * * *"
   concurrencyPolicy: Forbid
   backOffLimit: 3
+  successfulJobsHistoryLimit: 0
+  failedJobsHistoryLimit: 0
   jobTemplate:
     spec:
       template:
         spec:
+          restartPolicy: Never
           containers:
           - name: drupal-dbdump-cron
             image: {{ .Values.drupal.image | quote }}
             command: ["/bin/sh", "-c"]
-            # TODO: only if branch name is defined to make backups
-            # TODO 2: file = date, symlink to latest. Cleanup.
             args:
             - cd web;
               mkdir -p /var/backups/db/;
@@ -65,6 +66,3 @@ spec:
           - name: drupal-backups-volume
             persistentVolumeClaim:
               claimName: {{ .Release.Namespace }}-backups
-          restartPolicy: OnFailure
-          successfulJobsHistoryLimit: 0
-          failedJobsHistoryLimit: 0
