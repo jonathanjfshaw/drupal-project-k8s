@@ -58,6 +58,8 @@ spec:
       - image: {{ .Values.drupal.image | quote }}
         name: drupal
         env:
+        - name: RELEASE_NAME
+          value: {{ .Release.Name }}
         - name: DB_USER
           value: "{{ .Values.mariadb.db.user }}"
         - name: DB_NAME

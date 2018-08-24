@@ -20,9 +20,11 @@ spec:
             args:
             - cd web;
               bootstrapped=$(drush status --field=bootstrap);
-              if [[ $bootstrapped = *'Success'* ]]; then drush sql-dump > /var/backups/db-{{ .Release.Name }}-latest.sql ;
+              if [[ $bootstrapped = *'Success'* ]]; then drush sql-dump > "/var/backups/db-$RELEASE_NAME-latest.sql" ;
               fi;
             env:
+            - name: RELEASE_NAME
+              value: {{ .Release.Name }}
             - name: PHP_FPM_CLEAR_ENV
               value: "no"
             - name: DB_USER
