@@ -26,3 +26,5 @@ ingress:
 
 secrets:
     hashsalt: "template-hash-salt"
+
+production_release_name: "feature-janis"
