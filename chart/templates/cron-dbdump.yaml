@@ -6,8 +6,8 @@ spec:
   schedule: "{{ randAlphaNum 1 }} 2 * * *"
   concurrencyPolicy: Forbid
   backOffLimit: 3
-  successfulJobsHistoryLimit: 0
-  failedJobsHistoryLimit: 0
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
   jobTemplate:
     spec:
       template:
