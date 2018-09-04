@@ -16,15 +16,12 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ .Release.Namespace }}-backups-claim
+  name: {{ .Release.Namespace }}-dbdump
   namespace: {{ .Release.Namespace }}
 spec:
-  selector:
-    matchLabels:
-      for_app: {{ .Release.Namespace }}
   storageClassName: nfs
   accessModes:
   - ReadWriteOnce
   resources:
     requests:
-      storage: 1Gi
+      storage: 10Gi

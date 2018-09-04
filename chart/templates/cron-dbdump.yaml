@@ -19,7 +19,6 @@ spec:
             command: ["/bin/sh", "-c"]
             args:
             - cd web;
-              mkdir -p /var/backups/db/;
               bootstrapped=$(drush status --field=bootstrap);
               if [[ $bootstrapped = "Successful" ]] && [[ "$RELEASE_NAME" = "$PRODUCTION_RELEASE_NAME" ]];
               then drush sql-dump > "/var/backups/db/$RELEASE_NAME-latest.sql";
@@ -54,14 +53,14 @@ spec:
             volumeMounts:
               - name: drupal-files-volume
                 mountPath: /var/www/html/web/sites/default/files
-              - name: drupal-backups-volume
-                mountPath: /var/backups
+              - name: drupal-dbdump-volume
+                mountPath: /var/backups/db
           imagePullSecrets:
           - name: gcr
           volumes:
           - name: drupal-files-volume
             persistentVolumeClaim:
               claimName: {{ .Release.Name }}-public-files
-          - name: drupal-backups-volume
+          - name: drupal-dbdump-volume
             persistentVolumeClaim:
-              claimName: {{ .Release.Namespace }}-backups
+              claimName: {{ .Release.Namespace }}-dbdump
