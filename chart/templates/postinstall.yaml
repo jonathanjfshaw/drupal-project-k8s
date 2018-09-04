@@ -15,8 +15,6 @@ spec:
   template:
     spec:
       restartPolicy: Never
-      successfulJobsHistoryLimit: 0
-      failedJobsHistoryLimit: 0
       containers:
       - name: postinstall
         image: {{ .Values.drupal.image | quote }}
