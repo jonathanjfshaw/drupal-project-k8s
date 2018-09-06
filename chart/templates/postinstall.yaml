@@ -22,7 +22,7 @@ spec:
         args:
         - cd web;
           conf_count=$(ls ../config/sync/ | wc -l);
-          if [ $conf_count -gt 1 ]; then drush sql-cli < "/var/backups/db/$PRODUCTION_RELEASE_NAME-latest.sql"; drush site-install -n config_installer;
+          if [ $conf_count -gt 1 ]; then drush sql-cli < "/var/backups/$PRODUCTION_RELEASE_NAME-latest.sql"; drush site-install -n config_installer;
           else drush site-install minimal -y;
           fi;
         env:
@@ -52,7 +52,7 @@ spec:
           - name: drupal-files-volume
             mountPath: /var/www/html/web/sites/default/files
           - name: drupal-dbdump-volume
-            mountPath: /var/backups/db
+            mountPath: /var/backups
       imagePullSecrets:
       - name: gcr
       volumes:
