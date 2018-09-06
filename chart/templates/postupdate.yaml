@@ -21,7 +21,9 @@ spec:
         command: ["/bin/sh", "-c"]
         args:
         - cd web;
-          drush updatedb -n; drush config-import -n; drush entity-updates -n;
+          conf_count=$(ls ../config/sync/ | wc -l);
+          if [ $conf_count -gt 1 ]; then drush updatedb -n; drush config-import -n; drush entity-updates -n;
+          fi;
         env:
         - name: PRODUCTION_RELEASE_NAME
           value: {{ .Values.production_release_name | default "production" }}
@@ -46,7 +48,7 @@ spec:
           - name: drupal-files-volume
             mountPath: /var/www/html/web/sites/default/files
           - name: drupal-dbdump-volume
-            mountPath: /var/backups/db
+            mountPath: /var/backups
       imagePullSecrets:
       - name: gcr
       volumes:
