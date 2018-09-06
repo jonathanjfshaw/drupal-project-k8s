@@ -89,7 +89,7 @@ spec:
         - name: drupal-files-volume
           mountPath: /var/www/html/web/sites/default/files
         - name: drupal-dbdump-volume
-          mountPath: /var/backups/db
+          mountPath: /var/backups
       imagePullSecrets:
       - name: gcr
       volumes:

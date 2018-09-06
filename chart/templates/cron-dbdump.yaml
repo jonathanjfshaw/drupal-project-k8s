@@ -21,7 +21,7 @@ spec:
             - cd web;
               bootstrapped=$(drush status --field=bootstrap);
               if [[ $bootstrapped = "Successful" ]] && [[ "$RELEASE_NAME" = "$PRODUCTION_RELEASE_NAME" ]];
-              then drush sql-dump > "/var/backups/db/$RELEASE_NAME-latest.sql";
+              then drush sql-dump > "/var/backups/$RELEASE_NAME-latest.sql";
               fi;
             env:
             - name: RELEASE_NAME
@@ -54,7 +54,7 @@ spec:
               - name: drupal-files-volume
                 mountPath: /var/www/html/web/sites/default/files
               - name: drupal-dbdump-volume
-                mountPath: /var/backups/db
+                mountPath: /var/backups
           imagePullSecrets:
           - name: gcr
           volumes:
