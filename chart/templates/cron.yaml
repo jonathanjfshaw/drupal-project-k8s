@@ -1,9 +1,10 @@
+#/var/www/html/vendor/drush/drush
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: {{ .Release.Name }}-cron
 spec:
-  schedule: "0 * * * *"
+  schedule: "* * * * *"
   concurrencyPolicy: Forbid
   backOffLimit: 3
   jobTemplate:
@@ -14,8 +15,8 @@ spec:
           - name: drupal-cron
             image: "{{ .Values.drupal.image }}"
             command:
-            - drush
-            - cron
+            - echo
+            - "THIS IS A TEST MESSAGE"
             env:
             - name: PHP_FPM_CLEAR_ENV
               value: "no"

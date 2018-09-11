@@ -31,3 +31,7 @@ chart/charts
 
 #Ignore unencryupted secrets
 secrets
+
+
+#Developers (Agnis') own helper scripts
+helpers/
