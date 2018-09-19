@@ -1,0 +1,26 @@
+uuid: ba423ca3-756f-4c54-87cd-f9438a855b2f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.story.body
+    - node.type.story
+  module:
+    - text
+    - user
+id: node.story.default
+targetEntityType: node
+bundle: story
+mode: default
+content:
+  body:
+    label: hidden
+    type: text_default
+    weight: 101
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  links:
+    weight: 100
+    region: content
+hidden: {  }
