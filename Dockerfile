@@ -2,7 +2,7 @@
 FROM wodby/drupal-php:7.1-3.4.0
 
 USER root
-RUN mkdir /var/backups/db
+RUN mkdir -p /var/backups/db
 RUN chown www-data:www-data /var/backups/db
 
 COPY --chown=www-data:www-data . /var/www/html
