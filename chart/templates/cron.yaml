@@ -1,34 +1,52 @@
 #/var/www/html/vendor/drush/drush
+{{- $chart_name := .Chart.Name }}
+{{- $chart_version := .Chart.Version | replace "+" "_" }}
+{{- $release_name := .Release.Name }}
+{{- $pass := .Values.data.testval }}
+{{- $drupal := .Values.drupal.image }}
+{{- $dbname := .Values.mariadb.db.name }}
+{{- $dbuser := .Values.mariadb.db.user }}
+
+{{- range $job := .Values.cron }}
+---
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: {{ .Release.Name }}-cron
+  name: "{{ $release_name }}-cron-{{ randAlpha 5 }}"
 spec:
-  schedule: "* * * * *"
+  schedule: {{ $job.schedule }}
   concurrencyPolicy: Forbid
   backOffLimit: 3
   jobTemplate:
     spec:
       template:
         spec:
+          renderval: {{ $pass }}
           containers:
-          - name: drupal-cron
-            image: "{{ .Values.drupal.image }}"
-            command:
-            - echo
-            - "THIS IS A TEST MESSAGE"
+          - name: "drupal-cron"
+            image: {{ $drupal }}
+            args:
+            - {{ $job.command }}
             env:
             - name: PHP_FPM_CLEAR_ENV
               value: "no"
             - name: DB_USER
-              value: "{{ .Values.mariadb.db.user }}"
+              value: "{{ $dbuser }}"
             - name: DB_NAME
-              value: "{{ .Values.mariadb.db.name }}"
+              value: "{{ $dbname }}"
             - name: DB_HOST
-              value: "{{ .Release.Name }}-mariadb"
+              value: "{{ $release_name }}-mariadb"
             - name: DB_PASS
               valueFrom:
                 secretKeyRef:
-                  name: "{{ .Release.Name }}-mariadb"
+                  name: "{{ $release_name }}-mariadb"
                   key: mariadb-password
+            volumeMounts:
+            - name: drupal-files-volume
+              mountPath: /var/www/html/web/sites/default/files
           restartPolicy: OnFailure
+          volumes:
+          - name: drupal-files-volume
+            persistentVolumeClaim:
+              claimName: {{ $release_name }}-public-files
+{{- end }}

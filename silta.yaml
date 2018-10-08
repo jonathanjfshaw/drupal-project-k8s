@@ -1,0 +1,18 @@
+  cron:
+    - desc: "Drush Job 1"
+      command: 'drush cron'
+      schedule: '0 * * * * *'
+    - desc: "Drush Job 2"
+      command: 'ping lol'
+      schedule: '*/5 * * * * *'
+  #---START of Testing values during dev 
+  data:
+    testval: 123
+  drupal:
+    image: eu.gcr.io/silta-204108/agnis/drupal
+  nginx:
+    image: eu.gcr.io/silta-204108/agnis/nginx
+  mariadb.rootUser.password: test
+  mariadb.db.password: test
+  namespace: drupal-project-k8s
+  #---END

@@ -33,5 +33,7 @@ chart/charts
 secrets
 
 
-#Developers (Agnis') own helper scripts
+#Developers own helper files
 helpers/
+k8s_commands.txt
+silta.code-workspace
