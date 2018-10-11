@@ -33,12 +33,9 @@ drupal:
 mariadb:
   replication:
     enabled: false
-  rootUser:
-    password: "{{ randAlphaNum 10 }}" # pass in a value to your helm chart to override this
   db:
     name: drupal
     user: drupal
-    password: "{{ randAlphaNum 10 }}" # pass in a value to your helm chart to override this
 
 clusterDomain: "silta.wdr.io"
 branchname: "default"
