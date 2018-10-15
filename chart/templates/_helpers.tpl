@@ -21,6 +21,8 @@ volumeMounts:
   - name: drupal-private-files
     mountPath: /var/www/html/private
   {{- end }}
+  - name: drupal-dbdump-volume
+    mountPath: /var/backups/db
 {{- end }}
 
 {{- define "drupal.volumes" }}
@@ -32,6 +34,9 @@ volumeMounts:
   persistentVolumeClaim:
     claimName: {{ .Release.Name }}-private-files
 {{- end }}
+- name: drupal-dbdump-volume
+  persistentVolumeClaim:
+    claimName: {{ .Release.Namespace }}-dbdump
 {{- end }}
 
 {{- define "drupal.imagePullSecrets" }}
@@ -42,6 +47,10 @@ imagePullSecrets:
 {{- end }}
 
 {{- define "drupal.env" }}
+- name: BRANCHNAME
+  value: {{ .Values.branchname }}
+- name: PRODUCTION_BRANCHNAME
+  value: {{ .Values.production_branchname | default "production" }}
 - name: DB_USER
   value: "{{ .Values.mariadb.db.user }}"
 - name: DB_NAME
